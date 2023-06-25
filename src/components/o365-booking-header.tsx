@@ -1,6 +1,6 @@
 
 import * as React from 'react';
-import { makeStyles, typographyStyles } from '@fluentui/react-components';
+import { makeStyles, shorthands } from '@fluentui/react-components';
 
 const useStyles = makeStyles({
     headerSection:{
@@ -8,16 +8,17 @@ const useStyles = makeStyles({
         color: '#FFFFFF',
         backgroundColor: '#536076',
         height:'100px',
-        paddingTop: '16px',
-        paddingRight: '0px',
-        paddingBottom: '16px',
-        paddingLeft: '0px'
+        ...shorthands.padding('16px', '0px', '16px','0px'),
     },
     headerTitle:{
-        marginTop: '20px',
-        marginRight: '28px',
-        marginBottom: '20px',
-        marginLeft: '28px'
+        ...shorthands.margin('20px', '28px', '20px','28px'),
+        fontSize: '44px',
+        fontFamily: '"WF-Segoe-UI-Light", "Segoe UI Light", "Segoe WP Light", "Segoe UI", Tahoma, Arial, Sans-Serif',
+        fontWeight: 'normal',
+        opacity: '0.9',
+        display: 'block',
+        ...shorthands.marginBlock('0.67em','0.67em'),
+        ...shorthands.marginInline('0px','0px'),
     }
   });
 

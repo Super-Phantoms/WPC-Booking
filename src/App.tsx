@@ -2,6 +2,7 @@ import React from 'react';
 import logo from './logo.svg';
 import './App.css';
 import Header from './components/o365-booking-header';
+import Footer from './components/o365-booking-footer';
 import { makeStyles } from '@fluentui/react-components';
 
 const useMainStyles = makeStyles({
@@ -24,6 +25,8 @@ function App() {
     <div className="App">
       <div className={classes.root}>
         <Header />
+        adfasd
+        <Footer/>
       </div>
     </div>
   );
