@@ -5,6 +5,7 @@
   "dependencies": {
     "@fluentui/react": "^8.110.4",
     "@fluentui/react-components": "^9.22.0",
+    "@fluentui/web-components": "^2.5.15",
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
@@ -12,9 +13,12 @@
     "@types/node": "^16.18.36",
     "@types/react": "^18.2.14",
     "@types/react-dom": "^18.2.6",
+    "@uifabric/styling": "^7.25.1",
     "react": "^18.2.0",
+    "react-context-selector": "^1.0.3",
     "react-dom": "^18.2.0",
     "react-scripts": "5.0.1",
+    "scheduler": "^0.23.0",
     "typescript": "^4.9.5",
     "web-vitals": "^2.1.4"
   },

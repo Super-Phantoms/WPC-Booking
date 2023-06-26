@@ -1,4 +1,5 @@
-import { makeStyles, shorthands,typographyStyles,Label,Input } from '@fluentui/react-components';
+import { makeStyles, shorthands,Label,Input,Textarea,Button } from '@fluentui/react-components';
+import { mergeStyles } from '@uifabric/styling';
 
 const useStyles = makeStyles({
     title: {        
@@ -22,45 +23,77 @@ const useStyles = makeStyles({
     },
     label:{
         fontSize:'18px',
-        width:'80%',
-        marginRight:'50px',
+        width:'100%',
+        marginLeft:'30px',
+        marginTop:'10px',
+        marginRight:'20px',
         textAlign:'left'
+    },
+    row:{
+        display:'flex'
+    },
+    textArea:{
+        fontSize:'18px',
+        width:'90%',
+        height:'130px',
+        marginLeft:'30px',
+        marginTop:'30px',
+        marginRight:'20px',
+        textAlign:'left'
+    },
+    buttonArea:{
+        marginTop:'50px'
+    },
+    button:{
+        minWidth:'240px',
+        lineHeight:'30px',
+        fontSize:'18px',
+        backgroundColor:'#444791',
+        color:'white'
     }
   });
 
+  
+
 function Form(){
     const styles = useStyles();
+    const labelClass = mergeStyles('ms-Grid-row', styles.row);
+    const gridArea = mergeStyles('ms-Grid', styles.buttonArea);
+    // const textAreaClass = mergeStyles('ms-Grid-row', styles.textArea);
     return(
-        <>
-            <div>
-                <div className={styles.titleArea}>
-                    <h1 id='formTitle' className={styles.title}>Add your details</h1>  
-                    <div className="ms-Grid" >
+        <>           
+        <div className={styles.titleArea}>
+            <h1 id='formTitle' className={styles.title}>Add your details</h1>  
+            <div className="ms-Grid" >
+                <div className="ms-Grid-row">
+                    <div className="ms-Grid-col ms-lg6">
                         <div className="ms-Grid-row">
-                            <div className="ms-Grid-col ms-lg6">
-                                <div className="ms-Grid-row">
-                                    <Input id="name" appearance="underline" placeholder="Name*" className={styles.inputField}/>
-                                </div>
-                                <div className="ms-Grid-row">
-                                    <Input id="email" appearance="underline" placeholder="Email*" className={styles.inputField}/>
-                                </div>
-                                <div className="ms-Grid-row">
-                                    <Input id="address" appearance="underline" placeholder="Address(optional)" className={styles.inputField}/>
-                                </div>
-                                <div className="ms-Grid-row">
-                                    <Input id="phone" appearance="underline" placeholder="Phone number(optional)" className={styles.inputField}/>
-                                </div>
-                            </div>                    
-                            <div className="ms-Grid-col ms-lg6">
-                                <div className="ms-Grid-row">
-                                    <Label  className={styles.label}> Please let us know if you have any special requests. Thank you.</Label>
-                                </div>
-                            </div>
+                            <Input id="name" appearance="underline" placeholder="Name*" className={styles.inputField}/>
                         </div>
-                    </div>                 
-                </div>                
-                
-            </div>
+                        <div className="ms-Grid-row">
+                            <Input id="email" appearance="underline" placeholder="Email*" className={styles.inputField}/>
+                        </div>
+                        <div className="ms-Grid-row">
+                            <Input id="address" appearance="underline" placeholder="Address(optional)" className={styles.inputField}/>
+                        </div>
+                        <div className="ms-Grid-row">
+                            <Input id="phone" appearance="underline" placeholder="Phone number(optional)" className={styles.inputField}/>
+                        </div>
+                    </div>                    
+                    <div className="ms-Grid-col ms-lg6">
+                        <div className={labelClass}>
+                            <Label  className={styles.label}> Please let us know if you have any special requests. Thank you.</Label>
+                        </div>
+                        <div className={labelClass}>
+                            <Textarea placeholder="Notes(optional)" className={styles.textArea} />
+                        </div>
+                    </div>
+                </div>
+            </div>      
+            <div className={gridArea}>
+                <Button className={styles.button}>Book</Button>
+            </div>          
+        </div>             
         </>
     );
 }

@@ -1,11 +1,10 @@
 import React from 'react';
-import logo from './logo.svg';
 import './App.css';
 
 import Header from './components/o365-booking-header';
 import Footer from './components/o365-booking-footer';
 import Services from './components/o365-booking-services';
-import Calendar from './components/o365.booking.calendar';
+import TimeArea from './components/o365.booking.time';
 import Form from './components/o365-booking-form';
 import { makeStyles } from '@fluentui/react-components';
 import { initializeIcons } from '@fluentui/font-icons-mdl2';
@@ -33,7 +32,7 @@ function App() {
       <div className={classes.root}>
         <Header />
         <Services />
-        <Calendar />
+        <TimeArea />
         <Form />
         <Footer/>
       </div>
