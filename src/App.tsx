@@ -4,7 +4,7 @@ import './App.css';
 import Header from './components/o365-booking-header';
 import Footer from './components/o365-booking-footer';
 import Services from './components/o365-booking-services';
-import TimeArea from './components/o365.booking.time';
+import TimeArea from './components/o365-booking-time';
 import Form from './components/o365-booking-form';
 import { makeStyles } from '@fluentui/react-components';
 import { initializeIcons } from '@fluentui/font-icons-mdl2';
