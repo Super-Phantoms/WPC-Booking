@@ -1,5 +1,7 @@
-import { makeStyles, shorthands,Button} from '@fluentui/react-components';
+import { makeStyles, shorthands} from '@fluentui/react-components';
+import { Icon } from '@fluentui/react/lib/Icon';
 import { mergeStyles } from '@uifabric/styling';
+import ServiceItem from './o365-booking-serviceItem';
 
 const useStyles = makeStyles({
     title: {
@@ -21,7 +23,10 @@ const useStyles = makeStyles({
         borderTopColor:'#eaeaea',
         marginRight:'4%',
         width:'46%',
-        height:'70px'
+        height:'100px',
+        paddingLeft:'0px',
+        paddingRight:'0px',
+        fontSize:'18px'
     },
     labelRight:{
         borderTopWidth: '1px',
@@ -29,34 +34,37 @@ const useStyles = makeStyles({
         borderTopColor:'#eaeaea',
         width:'46%',
         marginLeft:'4%',
-        height:'70px'
-    }
+        height:'100px',
+        paddingLeft:'0px',
+        paddingRight:'0px'
+    },   
   });
 
 function Services(){
     const styles = useStyles();
     const labelLeftClass = mergeStyles('ms-Grid-col ms-lg6', styles.labelLeft);
     const labelRightClass = mergeStyles('ms-Grid-col ms-lg6', styles.labelRight);
+   
+
+ 
     return(
         <>
             <div>
                 <div className={styles.titleArea}>
                     <h1 id='serviceTitle' className={styles.title}>Select service</h1>
                     <div className="ms-Grid" >
-                        <div className="ms-Grid-row">
+                        <div className="ms-Grid-row">                            
                             <div className={labelLeftClass}>
-                                <Button appearance="subtle" >
-                                    Subtle
-                                </Button>
+                               <ServiceItem />
                             </div>
                             <div className={labelRightClass}>
-                                aaa
+                                <ServiceItem />
                             </div>
                             <div className={labelLeftClass}>
-                                aaa
+                                <ServiceItem />
                             </div>
                             <div className={labelRightClass}>
-                                aaa
+                                <ServiceItem />
                             </div>
                         </div>
                     </div>
