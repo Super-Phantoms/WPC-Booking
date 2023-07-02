@@ -1,12 +1,13 @@
-import { makeStyles, shorthands} from '@fluentui/react-components';
-import { Icon } from '@fluentui/react/lib/Icon';
+import { makeStyles, shorthands,Button} from '@fluentui/react-components';
 import { mergeStyles } from '@uifabric/styling';
+import { Key, useCallback, useEffect, useState } from 'react';
 import ServiceItem from './o365-booking-serviceItem';
-
+import { getJSONStorage } from '../utils/setItemStorage';
+import { getBookingServices } from '../service/BookingServices';
+import { bookingServiceData } from '../constants/res';
+import { formGetDurationInSeconds } from '../utils/getDurationAndCurrency';
 const useStyles = makeStyles({
     title: {
-        
-        fontSize:'18px',
         fontFamily: '"WF-Segoe-UI-Light", "Segoe UI Light", "Segoe WP Light", "Segoe UI", Tahoma, Arial, Sans-Serif',
         fontWeight: 'normal',
         opacity: '0.9',
@@ -23,10 +24,7 @@ const useStyles = makeStyles({
         borderTopColor:'#eaeaea',
         marginRight:'4%',
         width:'46%',
-        height:'100px',
-        paddingLeft:'0px',
-        paddingRight:'0px',
-        fontSize:'18px'
+        height:'80px'
     },
     labelRight:{
         borderTopWidth: '1px',
@@ -34,38 +32,58 @@ const useStyles = makeStyles({
         borderTopColor:'#eaeaea',
         width:'46%',
         marginLeft:'4%',
-        height:'100px',
-        paddingLeft:'0px',
-        paddingRight:'0px'
-    },   
+        height:'80px'
+    },
+
   });
 
-function Services(){
-    const styles = useStyles();
-    const labelLeftClass = mergeStyles('ms-Grid-col ms-lg6', styles.labelLeft);
-    const labelRightClass = mergeStyles('ms-Grid-col ms-lg6', styles.labelRight);
-   
+interface props {
+    selectService: (service: any) => void
+}
 
- 
+const Services:React.FC<props> = ({selectService}) => {
+    const styles = useStyles();
+    const labelLeftClass = mergeStyles('ms-Grid-col ms-lg2', styles.labelLeft);
+    const labelRightClass = mergeStyles('ms-Grid-col ms-lg6', styles.labelRight);
+    const [loading, setLoading] = useState(true);
+    const [service, setService] = useState<any>();
+    const [services, setServices] = useState([]);
+    // const services = bookingServiceData;
+    useEffect(() => {
+        async function fetchServices(){
+            let myservices = await getBookingServices();
+            // let myservices = bookingServiceData;
+            if (myservices) {
+                setServices(myservices);
+            }
+            setLoading(false);
+        }
+        fetchServices();    
+    }, [])
+
+    const onSelectService = (service: any) => {
+
+        selectService(service);
+        setService(service);
+    }
+
     return(
         <>
             <div>
                 <div className={styles.titleArea}>
-                    <h1 id='serviceTitle' className={styles.title}>Select service</h1>
+                    {!loading && <h1 id='serviceTitle' className={styles.title}>{(service && service?.displayName) ? service?.displayName:`Select service`}</h1>}
+                    {loading && <h1 id='serviceTitle' className={styles.title}>Loading Services...</h1>}
+
                     <div className="ms-Grid" >
-                        <div className="ms-Grid-row">                            
-                            <div className={labelLeftClass}>
-                               <ServiceItem />
+                        <div className="ms-Grid-row">
+                            {services && services.length > 0 && services?.map((service: any, index: number) => 
+                             <div key={service?.id} className={`${ index % 2 === 0? labelLeftClass: labelRightClass}`} onClick={e => {
+                                e.preventDefault();
+                                onSelectService(service);
+                            }}>
+                                 <ServiceItem service={service}/>
                             </div>
-                            <div className={labelRightClass}>
-                                <ServiceItem />
-                            </div>
-                            <div className={labelLeftClass}>
-                                <ServiceItem />
-                            </div>
-                            <div className={labelRightClass}>
-                                <ServiceItem />
-                            </div>
+                        )}
                         </div>
                     </div>
                     

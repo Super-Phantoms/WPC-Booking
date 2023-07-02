@@ -1,6 +1,7 @@
 import { makeStyles, shorthands} from '@fluentui/react-components';
 import { Icon } from '@fluentui/react/lib/Icon';
 import { mergeStyles } from '@uifabric/styling';
+import Services from './o365-booking-services';
 
 const useStyles = makeStyles({
    
@@ -8,17 +9,26 @@ const useStyles = makeStyles({
         textAlign:'left',
     },
     serviceIcon:{
-        marginTop:'15px',
-        fontSize:'28px'
+        marginTop:'12px',
+        fontSize:'24px'
     },
     serviceMainName:{
-        marginTop:'10px',
-        marginBottom:'10px'
-    }
-  });
+        fontSize: '20px',
+        marginTop:'5px',
+        marginBottom:'5px'
+    },
+    serviceDefaultPrice:{
+        fontSize: '14px',
+        marginTop:'3px',
+        marginBottom:'3px'
+    },
+});
 
+interface props {
+    service: any
+}
 
-function ServiceItem(){
+const ServiceItem: React.FC<props> = ({service}) => {
     const styles = useStyles();
     const hoverStyle = mergeStyles({
         selectors: {
@@ -32,6 +42,7 @@ function ServiceItem(){
     const serviceContentClass = mergeStyles('ms-Grid-col ms-lg8', styles.serviceContent);
     const serviceIconClass = mergeStyles('ms-Grid-col ms-lg2', styles.serviceIcon);
     const serviceMainName = mergeStyles('ms-Grid-row', styles.serviceMainName);
+    const serviceDefaultPrice = mergeStyles('ms-Grid-row', styles.serviceDefaultPrice);
 
     return(
         <>
@@ -40,13 +51,13 @@ function ServiceItem(){
                 <div className='ms-Grid-col ms-lg2'></div>
                 <div className={serviceContentClass}>
                     <div className={serviceMainName}>
-                        <span >ServiceName</span>
+                        <span >{service?.displayName}</span>
                     </div>
-                    <div className={serviceMainName}>
-                        <span>ServiceName</span>
+                    <div className={serviceDefaultPrice}>
+                        <span>{service?.defaultDuration}</span>
                     </div>
-                    <div className={serviceMainName}>
-                        <span>ServiceName</span>
+                    <div className={serviceDefaultPrice}>
+                        <span>{service?.defaultPrice && `$${service?.defaultPrice}`}&nbsp;{service?.defaultPriceType}</span>
                     </div>
                 </div>
                 <div className={serviceIconClass}>
