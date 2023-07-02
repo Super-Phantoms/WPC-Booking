@@ -49,7 +49,7 @@ export async function makeServiceData (services: any) {
 }
 
 export async function setService(service: any, selectedDate: string) {
-    debugger;
+    // debugger;
     const defaultDuration = formGetDurationInSeconds(service?.defaultDuration);
     const postbuffer = formGetDurationInSeconds(service?.postBuffer);
     const prebuffer = formGetDurationInSeconds(service?.preBuffer);

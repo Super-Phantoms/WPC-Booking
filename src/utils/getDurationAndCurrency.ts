@@ -729,3 +729,36 @@ export const getPriceTypes = (defaultPriceType: string, defaultPrice: number, cu
         }
     }
 }
+
+export const getDaysInMonth = (year:number, month:number) =>{
+    return new Date(year, month, 0).getDate();
+}
+export const getRestDates = (restDays:any) =>{
+    const dates = [];
+    for(let i=0; i< restDays.length; i++){
+        switch(restDays[i].day){
+            case 'sunday': dates.push(0); break;
+            case 'monday': dates.push(1); break;
+            case 'tuesday': dates.push(2); break;
+            case 'wednesday': dates.push(3); break;
+            case 'thursday': dates.push(4); break;
+            case 'friday': dates.push(5); break;
+            case 'saturday': dates.push(6); break;            
+        }
+    }
+    return dates;
+}
+
+export const getSelectedDate = (date:number) =>{
+    let dateOfWeek='';
+    switch(date){
+        case 0: dateOfWeek = 'sunday'; break;
+        case 1: dateOfWeek = 'monday'; break;
+        case 2: dateOfWeek = 'tuesday'; break;
+        case 3: dateOfWeek = 'wednesday'; break;
+        case 4: dateOfWeek = 'thursday'; break;
+        case 5: dateOfWeek = 'friday'; break;
+        case 6: dateOfWeek = 'saturday'; break;
+    }
+    return dateOfWeek;
+}
