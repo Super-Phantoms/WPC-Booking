@@ -28,16 +28,7 @@ const useStyles = makeStyles({
     titleArea:{
         ...shorthands.padding('16px', '0px', '16px','0px'),
         boxShadow: '0 -2px 6px 0 rgba(0, 0, 0, 0.1)'
-    },
-    staffSelectTitle:{
-        textAlign:'left',
-        fontSize:'18px',
-        marginTop:'20px'
-    },
-    staffSelect:{
-        marginTop:'20px',
-        width:'80%'    
-    },
+    },  
     calendar:{
         textSize:'20px',
         fontSize:'20px',
@@ -45,24 +36,30 @@ const useStyles = makeStyles({
    
   });
 interface props {
-    service: any
+    service: any;
+    selectSlot: (slot: any) => void;
+    selectDate: (date: any) => void;
 }
 
-const TimeArea:React.FC<props> = ({service}) => {
+const TimeArea:React.FC<props> = ({service,selectSlot,selectDate}) => {
 
     const styles = useStyles();
-    const staffSelectTitle = mergeStyles('ms-Grid-row', styles.staffSelectTitle);
-
+    
     const today = new Date();
     const [selectedDate, setSelectedDate] = useState(today);
     const [staffs, setStaffs] = useState<any[]>([]);
     const [staff, setStaf] = useState<any>(null);
+    const [slot, setSlot] = useState<any>();
     const [timeslots, setTimeSlots] = useState<any[]>([]);
     const [restrictDates, setRestricDates] = useState<any[]>([]);
     const [timeTitle, setTimeTitle] = useState<any>();
    
     const handleSelectDate = (date:any) => {
+        selectSlot('');
+        selectDate(date);
         setSelectedDate(date);
+        let date1 = getSelectedDate(new Date(date).getDay());
+        initSlots(date1);
         const options = { month: 'short', day: 'numeric' };
         const formattedDate = date.toLocaleDateString('en-US', options);
         if(timeTitle && timeTitle.includes('with')){            
@@ -75,6 +72,13 @@ const TimeArea:React.FC<props> = ({service}) => {
         }
         
     };
+    const setTitle = (title:any) =>{
+       
+        const formattedDate = selectedDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+        let timeTitle = formattedDate.toString();
+        timeTitle += ' '+ title;
+        setTimeTitle(timeTitle);
+    }
 
     const calendarRef = useRef<HTMLDivElement>(null);
     
@@ -84,10 +88,13 @@ const TimeArea:React.FC<props> = ({service}) => {
             buttons?.forEach((button:any) => {
             button.classList.add('button-font-customized');
         });
-
+       
     }, [])
     
     useEffect(() => {
+        let date  = new Date(selectedDate);
+        const formattedDate = selectedDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+        setTimeTitle(formattedDate);
         async function initDataForService() {
             let myStaffs = getJSONStorage('staffMembers');    
             const filterMembers = myStaffs.filter((staff:any) => {
@@ -103,17 +110,18 @@ const TimeArea:React.FC<props> = ({service}) => {
             if(minLeadDate) {
                 getDateOnServiceSelect(minLeadDate);
             }
-
-           initSlots();
+        let date = getSelectedDate(new Date(selectedDate).getDay());
+           initSlots(date);
         }
         if(service) {
             initDataForService();
         }
     }, [service]);
 
-    const initSlots = () =>{
+    const initSlots = (date:any) =>{
         let defaultBusinessHours = getJSONStorage('defaultBusinessHours');  
-        let date = getSelectedDate(new Date(selectedDate).getDay());
+        console.log(selectedDate);
+        // let date = getSelectedDate(new Date(selectedDate).getDay());
         const filterBusinessHours = defaultBusinessHours.filter((item:any)=>{
             if(item.day == date)
                 return item;
@@ -122,7 +130,11 @@ const TimeArea:React.FC<props> = ({service}) => {
         if(filterBusinessHours && filterBusinessHours[0].timeSlots.length > 0){
             const startTime = filterBusinessHours[0].timeSlots[0].startTime;
             const endTime = filterBusinessHours[0].timeSlots[0].endTime;
-            let timeSlotInterval = service.schedulingPolicy.timeSlotInterval;
+            let timeSlotInterval:any='';
+            if(!service.schedulingPolicy)
+                timeSlotInterval = service.defaultDuration;
+            else
+                timeSlotInterval = service.schedulingPolicy.timeSlotInterval;
             
             timeSlotInterval = formGetDurationInSeconds(timeSlotInterval);
             const dateObj = new Date(selectedDate);
@@ -165,35 +177,7 @@ const TimeArea:React.FC<props> = ({service}) => {
         setRestricDates(restricDates);
     }
 
-    const selectStaff = async (e: any) => {
-        // e.preventDefault();        
-        
-        setStaf(e.target.value);
-        const selectedIndex = e.target.selectedIndex;
-        if(timeTitle && timeTitle.includes('with')){            
-            let title = timeTitle;
-            title = title.replace(timeTitle.split('with')[1], ' '+ e.target.options[selectedIndex].text);
-            setTimeTitle(title);
-        }
-        else{
-            const title = timeTitle+" with "+ e.target.options[selectedIndex].text;
-            setTimeTitle(title);
-        }
-       
-        // const defaultDuration = formGetDurationInSeconds(service?.defaultDuration);
-        // const slots = await getTimeSlots(staff);        
-        // const filterSlots = slots.filter((slot:any)=>{
-        //     if(slot && slot.id == staff){
-        //         return slot;
-        //     }
-        // });
-
-        // setTimeSlots(slots);
-
-
-        // set availibility calendar and get timeslots by staff...
-        // staffWorkingHoursSlot();
-    }
+ 
 
     return(
         <>
@@ -211,33 +195,15 @@ const TimeArea:React.FC<props> = ({service}) => {
                                         onSelectDate={handleSelectDate}
                                         today={selectedDate}
                                         value={selectedDate}
-                                        // styles={customCalendarStyles}
                                         id="calendar"
-                                        
                                         restrictedDates={restrictDates}
                                         ref={calendarRef}
-                                        // size="'large'"
                                         className={styles.calendar}                                       
                                         />
                                 {/* <fluent-calendar></fluent-calendar> */}
                             </div>
-                            <div className="ms-Grid-col ms-lg6">
-                                <div className={staffSelectTitle}>
-                                
-                                    <span> Select staff (optional)</span>
-                               
-                                    <Select appearance="outline" className={styles.staffSelect} value={staff} onChange={(e) => {
-                                        selectStaff(e);
-                                    }}>
-                                        {staffs && staffs.length > 0 && staffs.map((staff: any) => (
-                                            <option key={staff?.id} value={staff?.id} >{staff?.displayName}</option>)
-                                        )}
-                                        {(!staff || staffs.length === 0) &&
-                                            <option value=""></option>
-                                        }
-                                    </Select>
-                                </div>
-                               <Slot  timeSlots={timeslots}/>
+                            <div className="ms-Grid-col ms-lg6">                               
+                               <Slot  timeSlots={timeslots} selectSlot={selectSlot} setTitle={setTitle}/>
                             </div>
                         </div>
                     </div>

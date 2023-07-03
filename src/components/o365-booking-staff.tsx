@@ -38,49 +38,49 @@ const useStyles = makeStyles({
   });
 
 interface props {
-    selectService: (service: any) => void
+    selectStaff: (staff: any) => void;
+    service:any;
 }
 
-const Services:React.FC<props> = ({selectService}) => {
+const Staffs:React.FC<props> = ({selectStaff,service}) => {
     const styles = useStyles();
     const labelLeftClass = mergeStyles('ms-Grid-col ms-lg2', styles.labelLeft);
     const labelRightClass = mergeStyles('ms-Grid-col ms-lg6', styles.labelRight);
     const [loading, setLoading] = useState(true);
-    const [service, setService] = useState<any>();
+    const [staff, setStaff] = useState<any>();
+    const [staffs, setStaffs] = useState<any[]>([]);
     const [services, setServices] = useState([]);
     // const services = bookingServiceData;
     useEffect(() => {
-        async function fetchServices(){
-            let myservices = await getBookingServices();
-            // let myservices = bookingServiceData;
-            if (myservices) {
-                setServices(myservices);
+        let myStaffs = getJSONStorage('staffMembers');    
+        const filterMembers = myStaffs.filter((staff:any) => {
+            if (service.staffMemberIds.includes(staff?.id)) {
+              return staff;
             }
-            setLoading(false);
-        }
-        fetchServices();    
+        });            
+        let currentStaffs = [{id: 'anyone', displayName: 'Anyone'},...filterMembers] 
+        setStaffs(currentStaffs);
     }, [])
 
-    const onSelectService = (service: any) => {
-        selectService(service);
-        setService(service);
+    const onSelectStaff = (staff: any) => {
+        selectStaff(staff);
+        setStaff(staff);
     }
 
     return(
         <>
             <div>
                 <div className={styles.titleArea}>
-                    {!loading && <h1 id='serviceTitle' className={styles.title}>{(service && service?.displayName) ? service?.displayName:`Select service`}</h1>}
-                    {loading && <h1 id='serviceTitle' className={styles.title}>Loading Services...</h1>}
+                   <h1 id='serviceTitle' className={styles.title}>{(staff && staff?.displayName) ? staff?.displayName:`Select staff`}</h1>
 
                     <div className="ms-Grid" >
                         <div className="ms-Grid-row">
-                            {services && services.length > 0 && services?.map((service: any, index: number) => 
-                             <div key={service?.id} className={`${ index % 2 === 0? labelLeftClass: labelRightClass}`} onClick={e => {
+                            {staffs && staffs.length > 0 && staffs?.map((staff: any, index: number) => 
+                             <div key={staff?.id} className={`${ index % 2 === 0? labelLeftClass: labelRightClass}`} onClick={e => {
                                 e.preventDefault();
-                                onSelectService(service);
+                                onSelectStaff(staff);
                             }}>
-                                 <ServiceItem service={service}/>
+                                 <ServiceItem service={staff}/>
                             </div>
                         )}
                         </div>
@@ -92,4 +92,4 @@ const Services:React.FC<props> = ({selectService}) => {
     );
 }
 
-export default Services;
+export default Staffs;
